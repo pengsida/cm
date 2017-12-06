@@ -64,7 +64,7 @@ namespace cm {
                 
                 // 记录已经处理过的行和列
                 have_done[max_col] = 1;
-                cout << new_mat << endl;
+//                cout << new_mat << endl;
             }
         }
         

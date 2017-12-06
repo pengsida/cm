@@ -84,6 +84,7 @@ namespace cm {
     public:
         static matrix<T> diag(int dim, const T& a);
         static void diag(int dim, const T& a, matrix<T>& new_mat);
+        static void transpose(const matrix<T>& src_mat, matrix<T>& dst_mat);
         
     public:
         matrix();
@@ -483,21 +484,30 @@ namespace cm {
     }
     
     template <typename T>
+    void matrix<T>::transpose(const matrix<T>& src_mat, matrix<T>& dst_mat) {
+        dst_mat.resize(src_mat.cols, src_mat.rows);
+        for (int i = 0; i < src_mat.cols; i++) {
+            for (int j = 0; j < src_mat.rows; j++)
+                dst_mat[i][j] = src_mat[j][i];
+        }
+    }
+    
+    template <typename T>
     matrix<T>::matrix(): rows(0), cols(0), mat(NULL) { }
     
     template <typename T>
     matrix<T>::matrix(int rows, int cols): rows(rows), cols(cols) {
         mat = new T*[rows];
         
-        for (int i = 0; i < cols; i++)
-            mat[i] = new T[cols]();
+        for (int i = 0; i < rows; i++)
+            mat[i] = new T[cols];
     }
     
     template <typename T>
     matrix<T>::matrix(int rows, int cols, const T& a): rows(rows), cols(cols) {
         mat = new T*[rows];
         
-        for (int i = 0; i < cols; i++) {
+        for (int i = 0; i < rows; i++) {
             mat[i] = new T[cols];
             
             for (int j = 0; j < cols; j++)
@@ -509,10 +519,10 @@ namespace cm {
     matrix<T>::matrix(int rows, int cols, const T* array): rows(rows), cols(cols) {
         mat = new T*[rows];
         
-        for (int i = 0; i < cols; i++) {
+        for (int i = 0; i < rows; i++) {
             mat[i] = new T[cols];
             
-            for (int j = 0; j < cols; j++)
+            for (int j = 0; j < rows; j++)
                 mat[i][j] = array[i * cols + j];
         }
     }
@@ -521,10 +531,10 @@ namespace cm {
     matrix<T>::matrix(const matrix<T>& rhs): rows(rhs.rows), cols(rhs.cols) {
         mat = new T*[rows];
         
-        for (int i = 0; i < cols; i++) {
+        for (int i = 0; i < rows; i++) {
             mat[i] = new T[cols];
             
-            for (int j = 0; j < cols; j++)
+            for (int j = 0; j < rows; j++)
                 mat[i][j] = rhs.mat[i][j];
         }
     }
